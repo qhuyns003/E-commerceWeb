@@ -19,7 +19,7 @@ public enum ErrorCode {
     DATETIME_INVALID(1011, "Your date is invalid", HttpStatus.BAD_REQUEST);
     private Integer code;
     private String message;
-    private HttpStatus httpStatus;
+    private HttpStatus httpStatu
 
     private ErrorCode(Integer code, String message, HttpStatus httpStatus) {
         this.code = code;
