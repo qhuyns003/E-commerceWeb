@@ -8,6 +8,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,4 +22,5 @@ public class ProductCreateRequest {
     String name;
     Long price;
     String unit;
+    List<MultipartFile> images;
 }

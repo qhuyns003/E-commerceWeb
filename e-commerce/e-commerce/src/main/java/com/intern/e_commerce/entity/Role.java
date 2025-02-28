@@ -1,16 +1,15 @@
 package com.intern.e_commerce.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -21,6 +20,14 @@ public class Role {
 
     String description;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    Set<Permission> permissions;
+    @ManyToMany(fetch = FetchType.LAZY,mappedBy = "roles")
+    Set<UserEntity> users= new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "role_permission",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "permission_id")
+    )
+    Set<Permission> permissions = new HashSet<>();
 }
