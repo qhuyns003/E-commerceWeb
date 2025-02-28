@@ -23,7 +23,6 @@ public class ProductController {
     @PostMapping(path ="/products",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<ProductResponse> createProduct(@ModelAttribute ProductCreateRequest productCreateRequest) throws IOException {
         System.out.println("lol");
-        System.out.println("222");
         return ApiResponse.<ProductResponse>builder()
                 .result(productService.createProduct(productCreateRequest))
                 .build();
