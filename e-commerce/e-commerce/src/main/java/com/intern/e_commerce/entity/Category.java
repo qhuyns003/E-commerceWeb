@@ -1,6 +1,7 @@
 package com.intern.e_commerce.entity;
 
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
@@ -16,10 +17,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Categories extends BaseEntity {
+public class Category extends BaseEntity {
     String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "categories")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category",cascade = CascadeType.ALL)
     List<Product> orderDetailList = new ArrayList<>();
 
 
