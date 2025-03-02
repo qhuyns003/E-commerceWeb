@@ -24,6 +24,7 @@ public enum ErrorCode {
     private String message;
     private HttpStatus httpStatus;
 
+
     private ErrorCode(Integer code, String message, HttpStatus httpStatus) {
         this.code = code;
         this.message = message;

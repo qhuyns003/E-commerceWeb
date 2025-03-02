@@ -28,12 +28,7 @@ public class User {
                 .build();
     }
 
-    @GetMapping("/users")
-    ApiResponse<List<UserResponse>> getUser() {
-        return ApiResponse.<List<UserResponse>>builder()
-                .result(userService.getUser())
-                .build();
-    }
+  
 
     @GetMapping("/myInfo")
     ApiResponse<UserResponse> getMyInfo() {
