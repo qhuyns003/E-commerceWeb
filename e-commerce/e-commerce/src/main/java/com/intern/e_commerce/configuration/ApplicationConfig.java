@@ -74,7 +74,21 @@ public class ApplicationConfig {
                         .build();
                 roleRepository.save(role);
             }
-
+            if( !roleRepository.existsById(Role.MANAGER.name())) {
+                Permission  permission= Permission.builder()
+                        .name("CREATE_POST")
+                        .description("create post")
+                        .build();
+                permissionRepository.save(permission);
+                Set<Permission> permissions = new HashSet<>();
+                permissions.add(permission);
+                com.intern.e_commerce.entity.Role role= com.intern.e_commerce.entity.Role.builder()
+                        .name(Role.MANAGER.name())
+                        .description("Manager")
+                        .permissions(permissions)
+                        .build();
+                roleRepository.save(role)   ;
+            }
             if (userRepository.findByUsername(userName).isEmpty()) {
                 Set<com.intern.e_commerce.entity.Role> roles = new HashSet<>();
                 com.intern.e_commerce.entity.Role role = roleRepository

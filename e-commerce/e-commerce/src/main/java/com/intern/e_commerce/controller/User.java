@@ -1,10 +1,11 @@
 package com.intern.e_commerce.controller;
 
 
+import com.intern.e_commerce.dto.request.CreateURoleRequest;
+import com.intern.e_commerce.dto.request.PasswordChangingRequest;
 import com.intern.e_commerce.dto.request.UserCreateRequest;
 import com.intern.e_commerce.dto.request.UserUpdateRequest;
-import com.intern.e_commerce.dto.response.ApiResponse;
-import com.intern.e_commerce.dto.response.UserResponse;
+import com.intern.e_commerce.dto.response.*;
 import com.intern.e_commerce.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 @Slf4j
 @RestController
@@ -63,4 +66,25 @@ public class User {
         log.info("Delete users controller ...");
         return ApiResponse.<String>builder().result("User deleted").build();
     }
+
+    @PutMapping("/passwordChanging")
+    ApiResponse<UserResponse> changePassword(@RequestBody PasswordChangingRequest request){
+        return ApiResponse.<UserResponse>builder()
+                .result(userService.changePassword(request))
+                .build();
+    }
+    @PostMapping("/userRole")
+    ApiResponse<CreateURoleResponse> createURole (@RequestBody CreateURoleRequest request){
+        return ApiResponse.<CreateURoleResponse>builder()
+                .result(userService.createURole(request))
+                .build();
+    }
+
+    @GetMapping("/userPermisiion/{id}")
+    ApiResponse<UserPermissionRespone> getUserPermisiion(@PathVariable String id){
+        return ApiResponse.<UserPermissionRespone>builder()
+                .result(userService.getUserPermission(id))
+                .build();
+    }
+
 }

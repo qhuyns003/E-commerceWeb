@@ -40,6 +40,8 @@ public class UserEntity {
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     List<Orders> orderList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy ="user" ,cascade = CascadeType.ALL)
     private Cart cart;
+
+
 }

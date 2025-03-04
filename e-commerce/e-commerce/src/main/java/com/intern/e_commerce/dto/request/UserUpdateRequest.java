@@ -14,6 +14,7 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+
 public class UserUpdateRequest {
 
     @Size(min = 5, message = "PASSWORD_INVALID")

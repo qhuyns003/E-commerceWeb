@@ -4,8 +4,6 @@ package com.intern.e_commerce.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.Id;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -23,7 +21,7 @@ public class Cart{
     String id;
 
     @OneToOne
-    @JoinColumn(name = "user_id",unique = true)// Mỗi user có một giỏ hàng
+    @JoinColumn(name = "user_id", unique = true) // Thêm khóa ngoại trỏ về User
     private UserEntity user;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -33,5 +31,6 @@ public class Cart{
             inverseJoinColumns = @JoinColumn(name = "product_id")
     )
     Set<Product> products = new HashSet<>();
+
 
 }
