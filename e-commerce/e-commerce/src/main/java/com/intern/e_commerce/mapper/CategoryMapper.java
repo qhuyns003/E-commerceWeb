@@ -18,8 +18,8 @@ public interface CategoryMapper {
     //    @Mapping(target = "lastName",ignore = true)
     Category toCategory(CategoryCreateRequest categoryCreateRequest);
 
-    @Mapping(target = "roles", ignore = true)
-    void updateUser(@MappingTarget UserEntity userEntity, UserUpdateRequest userUpdateRequest);
+//    @Mapping(target = "roles", ignore = true)
+//    void updateUser(@MappingTarget UserEntity userEntity, UserUpdateRequest userUpdateRequest);
 
     //    @Mapping(source = "firstName",target = "lastName")
     //  @Mapping(target = "roles", ignore = true)

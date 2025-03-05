@@ -1,6 +1,5 @@
 package com.intern.e_commerce.dto.response;
 
-import com.intern.e_commerce.entity.BaseEntity;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -12,6 +11,6 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CategoryResponse extends BaseEntity {
+public class CategoryResponse {
     String name;
 }

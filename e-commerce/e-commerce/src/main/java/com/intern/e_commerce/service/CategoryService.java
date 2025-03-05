@@ -36,16 +36,12 @@ import java.util.Set;
 @Slf4j
 @Transactional
 public class CategoryService {
-
     private final CategoryRepository categoryRepository;
-    private final CategoryMapper categoryMapper;
+    private final  CategoryMapper categoryMapper;
 
-    public CategoryService(
-            CategoryMapper categoryMapper,
-            CategoryRepository categoryRepository) {
-
-        this.categoryMapper = categoryMapper;
+    public CategoryService(CategoryRepository categoryRepository, CategoryMapper categoryMapper) {
         this.categoryRepository = categoryRepository;
+        this.categoryMapper = categoryMapper;
     }
 
     public CategoryResponse createCategory(CategoryCreateRequest categoryCreateRequest) {
@@ -59,5 +55,18 @@ public class CategoryService {
         return categoryMapper.toCategoryResponse(category);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<CategoryResponse> getCategory() {
+        List<Category> userEntity = categoryRepository.findAll();
+        List<CategoryResponse> categoryResponse = new ArrayList<>();
+        for (Category category1 : userEntity) {
+            categoryResponse.add(categoryMapper.toCategoryResponse(category1));
+        }
+        return categoryResponse;
+    }
+
+    public void deleteCategory(Long id) {
+        categoryRepository.deleteById(id);
+    }
 
 }
