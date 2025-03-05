@@ -16,10 +16,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Categories extends BaseEntity {
+public class Category extends BaseEntity {
     String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "categories")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     List<Product> orderDetailList = new ArrayList<>();
 
 
