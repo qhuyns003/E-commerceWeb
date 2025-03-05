@@ -23,7 +23,7 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
-
+    //thu
     @PostMapping
     ApiResponse<CategoryResponse> createCategory(@Valid @RequestBody CategoryCreateRequest categoryCreateRequest) {
         return ApiResponse.<CategoryResponse>builder()
