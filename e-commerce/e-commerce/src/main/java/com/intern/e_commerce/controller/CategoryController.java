@@ -2,6 +2,7 @@ package com.intern.e_commerce.controller;
 
 
 import com.intern.e_commerce.dto.request.CategoryCreateRequest;
+import com.intern.e_commerce.dto.request.CategoryUpdateRequest;
 import com.intern.e_commerce.dto.request.UserCreateRequest;
 import com.intern.e_commerce.dto.request.UserUpdateRequest;
 import com.intern.e_commerce.dto.response.ApiResponse;
@@ -45,6 +46,16 @@ public class CategoryController {
         log.info("Delete category controller ...");
         return ApiResponse.<String>builder().result("category deleted").build();
     }
+
+    @PutMapping("/{categoryId}")
+    ApiResponse<CategoryResponse> updateCategory(
+            @PathVariable long categoryId, @Valid @RequestBody CategoryUpdateRequest categoryUpdateRequest){
+        return ApiResponse.<CategoryResponse>builder()
+                .result(categoryService.updateCategory(categoryId, categoryUpdateRequest))
+                .build();
+    }
+
+
 
     
 }
