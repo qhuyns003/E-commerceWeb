@@ -60,7 +60,6 @@ public class User {
     @DeleteMapping("/{userId}")
     ApiResponse<String> deleteUser(@PathVariable String userId) {
         userService.deleteUser(userId);
-        log.info("Delete users controller ...");
         return ApiResponse.<String>builder().result("User deleted").build();
     }
 }

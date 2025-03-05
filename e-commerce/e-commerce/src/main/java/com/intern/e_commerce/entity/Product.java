@@ -29,8 +29,8 @@ public class Product extends BaseEntity {
     List<OrderDetail> orderDetailList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "categoriesId")
-    Categories categories;
+    @JoinColumn(name = "categoryId")
+    Category category;
 
     @ManyToMany(fetch = FetchType.LAZY,mappedBy = "products")
     Set<Cart> carts = new HashSet<>();
