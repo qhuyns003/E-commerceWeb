@@ -34,7 +34,6 @@ public class ApplicationConfig {
     final RoleRepository roleRepository;
     final PasswordEncoder passwordEncoder;
     final PermissionRepository permissionRepository;
-
     @Bean
     @ConditionalOnProperty(
             prefix = "spring",
