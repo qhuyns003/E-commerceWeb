@@ -25,7 +25,7 @@ public class Product extends BaseEntity {
     List<ProductImage> images = new ArrayList<>();
 
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "product",cascade = CascadeType.ALL)
     List<OrderDetail> orderDetailList = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
