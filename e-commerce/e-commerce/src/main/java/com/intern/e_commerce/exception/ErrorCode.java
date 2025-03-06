@@ -17,9 +17,13 @@ public enum ErrorCode {
     ROLE_EXISTED(1009, "Role already existed", HttpStatus.BAD_GATEWAY),
     DOB_INVALID(1010, "Your age must be at least {min}", HttpStatus.BAD_REQUEST),
     DATETIME_INVALID(1011, "Your date is invalid", HttpStatus.BAD_REQUEST),
-    PRODUCT_EXISTED(1020, "Product already existed", HttpStatus.BAD_REQUEST),
-    PRODUCT_NOT_FOUND(1021, "Product not found", HttpStatus.BAD_REQUEST),
-    TEST(1012,"test",HttpStatus.BAD_REQUEST);
+    PRODUCT_NOT_FOUND(1012,"Product not found",HttpStatus.BAD_REQUEST),
+    ORDER_NOT_FOUND(1013,"Order not found",HttpStatus.BAD_REQUEST),
+    CATEGORY_EXISTED(1014, "Category already existed", HttpStatus.BAD_GATEWAY),
+    CATEGORY_NOT_EXISTED(1015, "Category is not existed", HttpStatus.BAD_GATEWAY),
+    PASSWORD_WRONG(1016,"You must check your password again", HttpStatus.BAD_REQUEST),
+    PRODUCT_EXISTED(1017, "Product already existed", HttpStatus.BAD_REQUEST);
+
     private Integer code;
     private String message;
     private HttpStatus httpStatus;

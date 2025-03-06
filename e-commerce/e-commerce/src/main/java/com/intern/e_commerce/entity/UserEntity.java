@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -40,6 +41,8 @@ public class UserEntity {
     @OneToMany(mappedBy = "user",fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     List<Orders> orderList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy ="user" ,cascade = CascadeType.ALL)
     private Cart cart;
+
+
 }

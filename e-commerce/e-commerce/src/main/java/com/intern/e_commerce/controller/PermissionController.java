@@ -2,6 +2,7 @@ package com.intern.e_commerce.controller;
 
 
 import com.intern.e_commerce.dto.request.PermissionRequest;
+import com.intern.e_commerce.dto.request.PermissionUpdateRequest;
 import com.intern.e_commerce.dto.response.ApiResponse;
 import com.intern.e_commerce.dto.response.PermissionResponse;
 import com.intern.e_commerce.mapper.PermissionMapper;
@@ -38,5 +39,13 @@ public class PermissionController {
         return ApiResponse.<PermissionResponse>builder()
                 .result(permissionService.createPermission(permissionRequest))
                 .build();
+    }
+
+
+    @PutMapping("/{name}")
+    ApiResponse<PermissionResponse> updatePermission(@PathVariable String name, @RequestBody PermissionUpdateRequest request) {
+      return ApiResponse.<PermissionResponse>builder()
+              .result(permissionService.updatePermission(name,request))
+              .build();
     }
 }
