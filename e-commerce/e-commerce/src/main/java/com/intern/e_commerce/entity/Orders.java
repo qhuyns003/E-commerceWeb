@@ -19,12 +19,9 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Orders extends BaseEntity {
 
-    @Enumerated(EnumType.STRING)
     OrderStatus orderStatus;
     String address;
-    @Enumerated(EnumType.STRING)
     ShippingMethod shippingMethod;
-    @Enumerated(EnumType.STRING)
     PaymentMethod paymentMethod;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userId")

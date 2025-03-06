@@ -41,7 +41,7 @@ public class ApplicationConfig {
             value = "datasource.driverClassName",
             havingValue = "com.mysql.cj.jdbc.Driver")
     ApplicationRunner applicationRunner(UserRepositoryInterface userRepository, User user) {
-        log.info("Application s...");
+        log.info("Application started...");
         return args -> {
             if (!roleRepository.existsById(Role.ADMIN.name())) {
                 Permission permission = Permission.builder()
