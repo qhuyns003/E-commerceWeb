@@ -90,7 +90,7 @@ public class UserService {
         return userResponses;
     }
 
-    @PostAuthorize("returnObject.username = authentication.name")
+    @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getUser(String id) {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         return userMapper.toUserResponse(userEntity);

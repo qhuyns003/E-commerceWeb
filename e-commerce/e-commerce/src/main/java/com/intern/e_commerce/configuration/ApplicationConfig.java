@@ -2,6 +2,7 @@ package com.intern.e_commerce.configuration;
 
 
 import com.intern.e_commerce.controller.User;
+import com.intern.e_commerce.entity.Cart;
 import com.intern.e_commerce.entity.Permission;
 import com.intern.e_commerce.entity.UserEntity;
 import com.intern.e_commerce.enums.Role;
@@ -100,6 +101,9 @@ public class ApplicationConfig {
                         .password(passwordEncoder.encode("admin"))
                         .roles(roles)
                         .build();
+                userEntity.setCart(Cart.builder()
+                                .user(userEntity)
+                        .build());
                 userRepository.save(userEntity);
             }
         };
