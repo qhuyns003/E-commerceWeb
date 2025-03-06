@@ -35,14 +35,13 @@ public class ApplicationConfig {
     final RoleRepository roleRepository;
     final PasswordEncoder passwordEncoder;
     final PermissionRepository permissionRepository;
-
     @Bean
     @ConditionalOnProperty(
             prefix = "spring",
             value = "datasource.driverClassName",
             havingValue = "com.mysql.cj.jdbc.Driver")
     ApplicationRunner applicationRunner(UserRepositoryInterface userRepository, User user) {
-        log.info("Application started...");
+        log.info("Application s...");
         return args -> {
             if (!roleRepository.existsById(Role.ADMIN.name())) {
                 Permission permission = Permission.builder()

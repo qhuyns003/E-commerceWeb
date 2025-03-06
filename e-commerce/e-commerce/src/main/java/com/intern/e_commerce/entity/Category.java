@@ -12,14 +12,16 @@ import java.util.List;
 
 @Entity
 @Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Categories extends BaseEntity {
+public class Category extends BaseEntity {
     String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "categories")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     List<Product> orderDetailList = new ArrayList<>();
 
 

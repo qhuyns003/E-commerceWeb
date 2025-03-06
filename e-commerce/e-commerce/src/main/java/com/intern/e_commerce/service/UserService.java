@@ -76,6 +76,7 @@ public class UserService {
         } catch (DataIntegrityViolationException e) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
+        log.info("test branch");
         return userMapper.toUserResponse(userEntity);
     }
 
@@ -93,6 +94,7 @@ public class UserService {
     @PostAuthorize("returnObject.username == authentication.name")
     public UserResponse getUser(String id) {
         UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        log.info("pass");
         return userMapper.toUserResponse(userEntity);
     }
 
@@ -111,6 +113,7 @@ public class UserService {
 
     public void deleteUser(String id) {
         userRepository.deleteById(id);
+        log.info("da da xoa than hcong");
     }
 
     public UserResponse getMyInfo() {
