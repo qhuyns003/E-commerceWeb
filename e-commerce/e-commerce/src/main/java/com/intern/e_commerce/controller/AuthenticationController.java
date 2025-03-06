@@ -32,7 +32,7 @@ public class AuthenticationController {
 
     @PostMapping("/log-in")
     ApiResponse<AuthenticationResponse> authenticationUser(@RequestBody AuthenticationRequest authenticationRequest) {
-        return ApiResponse.<AuthenticationResponse>builder()
+         return ApiResponse.<AuthenticationResponse>builder()
                 .result(AuthenticationResponse.builder()
                         .token(authentication.authenticateUser(authenticationRequest))
                         .build())
