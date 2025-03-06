@@ -2,6 +2,7 @@ package com.intern.e_commerce.service;
 
 
 import com.intern.e_commerce.dto.request.CategoryCreateRequest;
+import com.intern.e_commerce.dto.request.CategoryUpdateRequest;
 import com.intern.e_commerce.dto.request.UserCreateRequest;
 import com.intern.e_commerce.dto.request.UserUpdateRequest;
 import com.intern.e_commerce.dto.response.CategoryResponse;
@@ -65,8 +66,19 @@ public class CategoryService {
         return categoryResponse;
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteCategory(Long id) {
         categoryRepository.deleteById(id);
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    public CategoryResponse updateCategory(Long id, CategoryUpdateRequest categoryUpdateRequest) {
+        Category category = categoryRepository.findById(id).orElseThrow(
+                () -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED));
+        categoryMapper.updateCategory(category, categoryUpdateRequest);
+        categoryRepository.save(category);
+        return categoryMapper.toCategoryResponse(category);
+
     }
 
 }

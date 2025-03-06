@@ -2,6 +2,7 @@ package com.intern.e_commerce.mapper;
 
 
 import com.intern.e_commerce.dto.request.CategoryCreateRequest;
+import com.intern.e_commerce.dto.request.CategoryUpdateRequest;
 import com.intern.e_commerce.dto.request.UserCreateRequest;
 import com.intern.e_commerce.dto.request.UserUpdateRequest;
 import com.intern.e_commerce.dto.response.CategoryResponse;
@@ -15,13 +16,9 @@ import org.mapstruct.MappingTarget;
 @Mapper(componentModel = "spring")
 public interface CategoryMapper {
 
-    //    @Mapping(target = "lastName",ignore = true)
     Category toCategory(CategoryCreateRequest categoryCreateRequest);
 
-//    @Mapping(target = "roles", ignore = true)
-//    void updateUser(@MappingTarget UserEntity userEntity, UserUpdateRequest userUpdateRequest);
+    void updateCategory(@MappingTarget Category category, CategoryUpdateRequest categoryUpdateRequest);
 
-    //    @Mapping(source = "firstName",target = "lastName")
-    //@Mapping(target = "roles", ignore = true)
     CategoryResponse toCategoryResponse(Category category);
 }
