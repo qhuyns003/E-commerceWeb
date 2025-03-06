@@ -2,6 +2,7 @@ package com.intern.e_commerce.configuration;
 
 
 import com.intern.e_commerce.controller.User;
+import com.intern.e_commerce.entity.Cart;
 import com.intern.e_commerce.entity.Permission;
 import com.intern.e_commerce.entity.UserEntity;
 import com.intern.e_commerce.enums.Role;
@@ -73,7 +74,21 @@ public class ApplicationConfig {
                         .build();
                 roleRepository.save(role);
             }
-
+            if( !roleRepository.existsById(Role.MANAGER.name())) {
+                Permission  permission= Permission.builder()
+                        .name("CREATE_POST")
+                        .description("create post")
+                        .build();
+                permissionRepository.save(permission);
+                Set<Permission> permissions = new HashSet<>();
+                permissions.add(permission);
+                com.intern.e_commerce.entity.Role role= com.intern.e_commerce.entity.Role.builder()
+                        .name(Role.MANAGER.name())
+                        .description("Manager")
+                        .permissions(permissions)
+                        .build();
+                roleRepository.save(role)   ;
+            }
             if (userRepository.findByUsername(userName).isEmpty()) {
                 Set<com.intern.e_commerce.entity.Role> roles = new HashSet<>();
                 com.intern.e_commerce.entity.Role role = roleRepository
@@ -85,6 +100,9 @@ public class ApplicationConfig {
                         .password(passwordEncoder.encode("admin"))
                         .roles(roles)
                         .build();
+                userEntity.setCart(Cart.builder()
+                                .user(userEntity)
+                        .build());
                 userRepository.save(userEntity);
             }
         };
