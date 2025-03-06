@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
@@ -34,5 +35,6 @@ public class Product extends BaseEntity {
 
     @ManyToMany(fetch = FetchType.LAZY,mappedBy = "products")
     Set<Cart> carts = new HashSet<>();
+
 
 }

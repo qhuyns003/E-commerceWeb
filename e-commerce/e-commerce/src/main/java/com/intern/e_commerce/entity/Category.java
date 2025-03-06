@@ -24,5 +24,4 @@ public class Category extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "category")
     List<Product> orderDetailList = new ArrayList<>();
 
-
 }
