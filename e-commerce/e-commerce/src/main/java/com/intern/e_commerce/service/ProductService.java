@@ -1,5 +1,18 @@
 package com.intern.e_commerce.service;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.intern.e_commerce.dto.request.ProductCreateRequest;
 import com.intern.e_commerce.dto.request.ProductUpdateRequest;
 import com.intern.e_commerce.dto.response.ProductResponse;
@@ -10,19 +23,8 @@ import com.intern.e_commerce.exception.ErrorCode;
 import com.intern.e_commerce.mapper.ProductMapper;
 import com.intern.e_commerce.repository.ProductRepository;
 import com.intern.e_commerce.repository.UserRepositoryInterface;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -30,8 +32,10 @@ import java.util.stream.Collectors;
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
+
     @Autowired
     private UserRepositoryInterface userRepository;
+
     @Autowired
     private ProductMapper productMapper;
 
@@ -43,9 +47,8 @@ public class ProductService {
         if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath))) {
             Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath));
         }
-        for(MultipartFile image : productCreateRequest.getImages()) {
-            Path file = CURRENT_FOLDER.resolve(staticPath)
-                    .resolve(imagePath).resolve(image.getOriginalFilename());
+        for (MultipartFile image : productCreateRequest.getImages()) {
+            Path file = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(image.getOriginalFilename());
             try (OutputStream os = Files.newOutputStream(file)) {
                 os.write(image.getBytes());
             }
@@ -53,21 +56,22 @@ public class ProductService {
 
         Product product = productMapper.toProduct(productCreateRequest);
         product.setImages(new ArrayList<>());
-        for(MultipartFile image : productCreateRequest.getImages()){
+        for (MultipartFile image : productCreateRequest.getImages()) {
             ProductImage productImage = ProductImage.builder()
                     .url(imagePath.resolve(image.getOriginalFilename()).toString())
                     .build();
             product.getImages().add(productImage);
         }
         ProductResponse productResponse = productMapper.toProductResponse(productRepository.save(product));
-        productResponse.setImages(product.getImages().stream().map(multiPart -> multiPart.getUrl()).toList());
+        productResponse.setImages(product.getImages().stream()
+                .map(multiPart -> multiPart.getUrl())
+                .toList());
         return productResponse;
-
     }
 
     public List<ProductResponse> getAllProduct() {
         List<Product> products = productRepository.findAll();
-        if(products.isEmpty()){
+        if (products.isEmpty()) {
             throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
         }
         List<ProductResponse> productResponses = products.stream()
@@ -76,24 +80,24 @@ public class ProductService {
         return productResponses;
     }
 
-
-    public ProductResponse updateProduct(Long id,ProductUpdateRequest request) throws IOException{
-        Product product = productRepository.findById(id.intValue()).orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
+    public ProductResponse updateProduct(Long id, ProductUpdateRequest request) throws IOException {
+        Product product = productRepository
+                .findById(id.intValue())
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND));
         productMapper.updateProduct(product, request);
         Path staticPath = Paths.get("static");
         Path imagePath = Paths.get("images");
         if (!Files.exists(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath))) {
             Files.createDirectories(CURRENT_FOLDER.resolve(staticPath).resolve(imagePath));
         }
-        for(MultipartFile image : request.getImages()) {
-            Path file = CURRENT_FOLDER.resolve(staticPath)
-                    .resolve(imagePath).resolve(image.getOriginalFilename());
+        for (MultipartFile image : request.getImages()) {
+            Path file = CURRENT_FOLDER.resolve(staticPath).resolve(imagePath).resolve(image.getOriginalFilename());
             try (OutputStream os = Files.newOutputStream(file)) {
                 os.write(image.getBytes());
             }
         }
         product.getImages().clear();
-        for(MultipartFile image : request.getImages()){
+        for (MultipartFile image : request.getImages()) {
             ProductImage productImage = ProductImage.builder()
                     .url(imagePath.resolve(image.getOriginalFilename()).toString())
                     .build();
@@ -101,14 +105,15 @@ public class ProductService {
         }
 
         return productMapper.toProductResponse(productRepository.save(product));
-
     }
 
-    public void deleteProduct(Long id) {productRepository.deleteById(id.intValue());}
+    public void deleteProduct(Long id) {
+        productRepository.deleteById(id.intValue());
+    }
 
     public List<ProductResponse> findProductByName(String keyword) {
-        List<Product> products =  productRepository.findProductByName(keyword);
-        if(products.isEmpty()){
+        List<Product> products = productRepository.findProductByName(keyword);
+        if (products.isEmpty()) {
             throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
         }
         List<ProductResponse> productResponses = products.stream()
