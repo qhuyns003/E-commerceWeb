@@ -1,10 +1,10 @@
 package com.intern.e_commerce.exception;
 
+import java.util.Map;
+import java.util.Objects;
 
-import com.intern.e_commerce.configuration.Translator;
-import com.intern.e_commerce.dto.response.ApiResponse;
 import jakarta.validation.ConstraintViolation;
-import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
@@ -12,11 +12,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import java.util.Map;
-import java.util.Objects;
+import com.intern.e_commerce.configuration.Translator;
+import com.intern.e_commerce.dto.response.ApiResponse;
+
+import io.swagger.v3.oas.annotations.Hidden;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @ControllerAdvice
+@Hidden
 public class GlobalExceptionHandler {
     private static final String MIN_ATTRIBUTE = "min";
 

@@ -1,16 +1,16 @@
 package com.intern.e_commerce.dto.response;
 
-import com.intern.e_commerce.entity.OrderDetail;
-import com.intern.e_commerce.entity.UserEntity;
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.*;
+
 import com.intern.e_commerce.enums.OrderStatus;
 import com.intern.e_commerce.enums.PaymentMethod;
 import com.intern.e_commerce.enums.ShippingMethod;
-import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @AllArgsConstructor

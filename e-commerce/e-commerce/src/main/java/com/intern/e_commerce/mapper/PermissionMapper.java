@@ -1,11 +1,11 @@
 package com.intern.e_commerce.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
 
 import com.intern.e_commerce.dto.request.PermissionRequest;
 import com.intern.e_commerce.dto.response.PermissionResponse;
 import com.intern.e_commerce.entity.Permission;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface PermissionMapper {
