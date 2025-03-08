@@ -2,7 +2,6 @@ package com.intern.e_commerce.controller;
 
 import java.util.List;
 
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -12,6 +11,8 @@ import com.intern.e_commerce.dto.response.ApiResponse;
 import com.intern.e_commerce.dto.response.RoleResponse;
 import com.intern.e_commerce.mapper.RoleMapper;
 import com.intern.e_commerce.service.RoleService;
+
+import io.swagger.v3.oas.annotations.Operation;
 
 @RequestMapping("/roles")
 @RestController

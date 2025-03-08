@@ -34,6 +34,7 @@ public class CategoryService {
     public CategoryResponse createCategory(CategoryCreateRequest categoryCreateRequest) {
         Category category = categoryMapper.toCategory(categoryCreateRequest);
         category.setName(categoryCreateRequest.getName());
+        // khong clean
         try {
             category = categoryRepository.save(category);
         } catch (DataIntegrityViolationException e) {
@@ -49,6 +50,7 @@ public class CategoryService {
         for (Category category1 : userEntity) {
             categoryResponse.add(categoryMapper.toCategoryResponse(category1));
         }
+        // dung stream
         return categoryResponse;
     }
 

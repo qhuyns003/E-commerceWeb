@@ -38,7 +38,7 @@ public class CartService {
         UserEntity user =
                 userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         Cart cart = user.getCart();
-
+        // chua clean
         return CartResponse.builder()
                 .products(new HashSet<>(cart.getProducts().stream()
                         .map(productMapper::toProductResponse)
@@ -62,6 +62,7 @@ public class CartService {
 
     public CartResponse removeProduct(CartRemoveProductRequest request) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        // thua
         Set<Product> products = new HashSet<>(productRepository.findAllById(request.getProductIds()));
         UserEntity user =
                 userRepository.findByUsername(username).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
