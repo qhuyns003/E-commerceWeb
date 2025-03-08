@@ -1,13 +1,13 @@
 package com.intern.e_commerce.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import com.intern.e_commerce.dto.request.RoleRequest;
 import com.intern.e_commerce.dto.request.RoleUpdateRequest;
 import com.intern.e_commerce.dto.response.RoleResponse;
 import com.intern.e_commerce.entity.Role;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface RoleMapper {

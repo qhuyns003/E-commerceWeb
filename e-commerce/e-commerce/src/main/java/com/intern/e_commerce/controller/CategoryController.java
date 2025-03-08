@@ -24,7 +24,8 @@ import java.util.List;
 public class CategoryController {
     @Autowired
     private CategoryService categoryService;
-    //thu
+
+    @Operation(summary = "tạo mới 1 danh mục", description = "không build fe")
     @PostMapping
     ApiResponse<CategoryResponse> createCategory(@Valid @RequestBody CategoryCreateRequest categoryCreateRequest) {
         return ApiResponse.<CategoryResponse>builder()
@@ -32,6 +33,7 @@ public class CategoryController {
                 .build();
     }
 
+    @Operation(summary = "Lấy thông tin của tất cả danh mục có trên hệ thống", description = "")
     @GetMapping
     ApiResponse<List<CategoryResponse>> getCategory() {
         return ApiResponse.<List<CategoryResponse>>builder()
@@ -39,7 +41,7 @@ public class CategoryController {
                 .build();
     }
 
-
+    @Operation(summary = "Xóa danh mục theo id trên url", description = "Lưu ý khi xóa danh mục là tất cả sản phẩ mlieen quan cũng bị xóa theo")
     @DeleteMapping("/{categoryId}")
     ApiResponse<String> deleteCategory(@PathVariable long categoryId) {
         categoryService.deleteCategory(categoryId);
@@ -47,9 +49,10 @@ public class CategoryController {
         return ApiResponse.<String>builder().result("category deleted").build();
     }
 
+    @Operation(summary = "Chỉnh sửa thông tin danh mục có id trên url", description = "")
     @PutMapping("/{categoryId}")
     ApiResponse<CategoryResponse> updateCategory(
-            @PathVariable long categoryId, @Valid @RequestBody CategoryUpdateRequest categoryUpdateRequest){
+            @PathVariable long categoryId, @Valid @RequestBody CategoryUpdateRequest categoryUpdateRequest) {
         return ApiResponse.<CategoryResponse>builder()
                 .result(categoryService.updateCategory(categoryId, categoryUpdateRequest))
                 .build();

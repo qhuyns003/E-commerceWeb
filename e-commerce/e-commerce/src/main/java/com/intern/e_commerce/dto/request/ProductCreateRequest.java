@@ -1,19 +1,14 @@
 package com.intern.e_commerce.dto.request;
 
-import com.intern.e_commerce.entity.OrderDetail;
-import com.intern.e_commerce.entity.UserEntity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import lombok.*;
-import lombok.experimental.FieldDefaults;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@Data
+import org.springframework.web.multipart.MultipartFile;
+
+import lombok.*;
+import lombok.experimental.FieldDefaults;
+
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
