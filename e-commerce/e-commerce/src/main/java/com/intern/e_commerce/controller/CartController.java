@@ -1,6 +1,5 @@
 package com.intern.e_commerce.controller;
 
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
 import com.intern.e_commerce.dto.request.CartAddProductRequest;
@@ -9,6 +8,7 @@ import com.intern.e_commerce.dto.response.ApiResponse;
 import com.intern.e_commerce.dto.response.CartResponse;
 import com.intern.e_commerce.service.CartService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -32,6 +32,7 @@ public class CartController {
     @Operation(summary = "Thêm sản phẩm vào giỏ của user hiện tại", description = "")
     @PutMapping("/products")
     public ApiResponse<CartResponse> addProduct(@RequestBody CartAddProductRequest request) {
+        // chi them vao gio hang 1 san pham 1 thoi diem thoi
         return ApiResponse.<CartResponse>builder()
                 .result(cartService.addProduct(request))
                 .build();

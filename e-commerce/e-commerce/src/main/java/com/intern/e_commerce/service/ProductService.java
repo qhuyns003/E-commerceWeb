@@ -60,6 +60,7 @@ public class ProductService {
             ProductImage productImage = ProductImage.builder()
                     .url(imagePath.resolve(image.getOriginalFilename()).toString())
                     .build();
+            productImage.setProduct(product);
             product.getImages().add(productImage);
         }
         ProductResponse productResponse = productMapper.toProductResponse(productRepository.save(product));
