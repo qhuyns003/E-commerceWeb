@@ -1,6 +1,6 @@
 package com.intern.e_commerce.controller;
 
-import com.intern.e_commerce.dto.MailStructure;
+import com.intern.e_commerce.dto.request.MailStructure;
 import com.intern.e_commerce.service.MailService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

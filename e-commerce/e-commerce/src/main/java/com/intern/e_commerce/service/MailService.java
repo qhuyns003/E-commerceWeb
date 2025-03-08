@@ -1,6 +1,6 @@
 package com.intern.e_commerce.service;
 
-import com.intern.e_commerce.dto.MailStructure;
+import com.intern.e_commerce.dto.request.MailStructure;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
