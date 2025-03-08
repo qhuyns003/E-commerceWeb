@@ -1,13 +1,12 @@
 package com.intern.e_commerce.entity;
 
+import java.util.HashSet;
+import java.util.Set;
 
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Getter
@@ -16,7 +15,7 @@ import java.util.Set;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class Cart{
+public class Cart {
     @jakarta.persistence.Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
@@ -29,9 +28,6 @@ public class Cart{
     @JoinTable(
             name = "cart_product",
             joinColumns = @JoinColumn(name = "cart_id"),
-            inverseJoinColumns = @JoinColumn(name = "product_id")
-    )
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     Set<Product> products = new HashSet<>();
-
-
 }

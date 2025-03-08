@@ -1,68 +1,60 @@
 package com.intern.e_commerce.controller;
 
-import com.intern.e_commerce.dto.request.OrderCreateRequest;
-import com.intern.e_commerce.dto.request.ProductCreateRequest;
-import com.intern.e_commerce.dto.response.ApiResponse;
-import com.intern.e_commerce.dto.response.OrderResponse;
-import com.intern.e_commerce.dto.response.ProductResponse;
-import com.intern.e_commerce.service.OrderService;
-import com.intern.e_commerce.service.ProductService;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.util.List;
+import com.intern.e_commerce.dto.request.OrderCreateRequest;
+import com.intern.e_commerce.dto.response.ApiResponse;
+import com.intern.e_commerce.dto.response.OrderResponse;
+import com.intern.e_commerce.service.OrderService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping( "/order")
+@RequestMapping("/order")
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
 
-
-
+    @Operation(summary = "Lấy tất cả các đơn hàng có trên hệ thống", description = "")
     @GetMapping()
-    public ApiResponse<List<OrderResponse>> getOrderOfUser(){
+    public ApiResponse<List<OrderResponse>> getOrderOfUser() {
         return ApiResponse.<List<OrderResponse>>builder()
                 .result(orderService.getOrderOfUser())
                 .build();
     }
+
+    @Operation(summary = "Tạo đơn hàng", description = "được gọi khi bấm nút đặt hàng trên view order")
     @PostMapping()
-    public ApiResponse<?> createOrderByProductIds(@RequestBody List<OrderCreateRequest> orderCreateRequests){
+    public ApiResponse<?> createOrderByProductIds(@RequestBody List<OrderCreateRequest> orderCreateRequests) {
         orderService.createOrders(orderCreateRequests);
-        return ApiResponse.builder()
-                .result("success")
-                .build();
+        return ApiResponse.builder().result("success").build();
     }
 
+    @Operation(summary = "Xem thông tin đơn hàng có id trên url", description = "")
     @GetMapping("/{id}")
-    public ApiResponse<?> myOrder(@PathVariable Long id){
-        return ApiResponse.builder()
-                .result(orderService.myOrder(id))
-                .build();
+    public ApiResponse<?> myOrder(@PathVariable Long id) {
+        return ApiResponse.builder().result(orderService.myOrder(id)).build();
     }
 
+    @Operation(summary = "Xác nhận đã giao hàng của đơn hàng có id trên url", description = "admin role")
     @PutMapping("successfulDelivering/{id}")
-    public ApiResponse<?> successfulDelivering(@PathVariable Long id){
+    public ApiResponse<?> successfulDelivering(@PathVariable Long id) {
         orderService.succesfullyDelivering(id);
-        return ApiResponse.builder()
-                .result("success")
-                .build();
+        return ApiResponse.builder().result("success").build();
     }
 
+    @Operation(
+            summary = "View order sau khi bấm thanh toán",
+            description =
+                    "Giao diện hiện lên gồm các sản phẩm -> chọn số lượng sản phẩm cũng như phương thức thanh toán,...")
     @GetMapping("/payment")
-    public ApiResponse<?> getPaymentOrder(@RequestParam List<Long> ids){
-        return ApiResponse.builder()
-                .result(orderService.getPaymentOrder(ids))
-                .build();
+    public ApiResponse<?> getPaymentOrder(@RequestParam List<Long> ids) {
+        return ApiResponse.builder().result(orderService.getPaymentOrder(ids)).build();
     }
-
-
-
-
-
 }

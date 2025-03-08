@@ -1,5 +1,20 @@
 package com.intern.e_commerce.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.intern.e_commerce.dto.request.CreateURoleRequest;
 import com.intern.e_commerce.dto.request.PasswordChangingRequest;
@@ -17,22 +32,8 @@ import com.intern.e_commerce.mapper.RoleMapper;
 import com.intern.e_commerce.mapper.UserMapper;
 import com.intern.e_commerce.repository.RoleRepository;
 import com.intern.e_commerce.repository.UserRepositoryInterface;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.security.access.prepost.PostAuthorize;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -68,9 +69,7 @@ public class UserService {
         roles.add(roleRepository.findById("USER").orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
         userEntity.setRoles(roles);
 
-        userEntity.setCart(Cart.builder()
-                        .user(userEntity)
-                .build());
+        userEntity.setCart(Cart.builder().user(userEntity).build());
         try {
             userEntity = userRepository.save(userEntity);
         } catch (DataIntegrityViolationException e) {
@@ -118,37 +117,43 @@ public class UserService {
 
     public UserResponse getMyInfo() {
         String id = SecurityContextHolder.getContext().getAuthentication().getName();
-        UserEntity userEntity = userRepository.findByUsername(id)
-                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-      return userMapper.toUserResponse(userEntity);
+        UserEntity userEntity =
+                userRepository.findByUsername(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        return userMapper.toUserResponse(userEntity);
     }
-    public UserResponse  changePassword(PasswordChangingRequest request){
-        String userName= SecurityContextHolder.getContext().getAuthentication().getName();
-        UserEntity user= userRepository.findByUsername(userName).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        if(request.getPassword().equals(request.getPasswordConfirmation())){
-        user.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));}
-        else throw new AppException(ErrorCode.PASSWORD_WRONG);
+
+    public UserResponse changePassword(PasswordChangingRequest request) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity user =
+                userRepository.findByUsername(userName).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        if (request.getPassword().equals(request.getPasswordConfirmation())) {
+            user.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
+        } else throw new AppException(ErrorCode.PASSWORD_WRONG);
         return userMapper.toUserResponse(userRepository.save(user));
     }
-    public CreateURoleResponse createURole (CreateURoleRequest request) {
-        UserEntity userEntity= userRepository.findByUsername(request.getUsername()).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        List<Role> roles= roleRepository.findAllById(request.getRoles());
+
+    public CreateURoleResponse createURole(CreateURoleRequest request) {
+        UserEntity userEntity = userRepository
+                .findByUsername(request.getUsername())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        List<Role> roles = roleRepository.findAllById(request.getRoles());
         userEntity.setRoles(new HashSet<>(roles));
         return CreateURoleResponse.builder()
                 .name(request.getUsername())
                 .roles(roles.stream().map(roleMapper::toResponse).toList())
                 .build();
     }
-    public UserPermissionRespone getUserPermission(String id){
-        UserEntity userEntity = userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
-        List<Role> l= userEntity.getRoles().stream().toList();
-        Set<Permission> se = l.stream()
-                .flatMap(role -> role.getPermissions().stream())
-                .collect(Collectors.toSet());
+
+    public UserPermissionRespone getUserPermission(String id) {
+        UserEntity userEntity =
+                userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        List<Role> l = userEntity.getRoles().stream().toList();
+        Set<Permission> se =
+                l.stream().flatMap(role -> role.getPermissions().stream()).collect(Collectors.toSet());
         return UserPermissionRespone.builder()
                 .username(userEntity.getUsername())
-                .permissions(new HashSet<>(se.stream().map(permissionMapper::toResponse).toList()))
+                .permissions(new HashSet<>(
+                        se.stream().map(permissionMapper::toResponse).toList()))
                 .build();
-
     }
 }
