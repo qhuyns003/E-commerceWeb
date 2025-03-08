@@ -1,18 +1,12 @@
 package com.intern.e_commerce.service;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import com.intern.e_commerce.dto.request.UserCreateRequest;
-import com.intern.e_commerce.dto.request.UserUpdateRequest;
-import com.intern.e_commerce.dto.response.UserResponse;
-import com.intern.e_commerce.entity.Role;
-import com.intern.e_commerce.entity.UserEntity;
-import com.intern.e_commerce.exception.AppException;
-import com.intern.e_commerce.exception.ErrorCode;
-import com.intern.e_commerce.mapper.RoleMapper;
-import com.intern.e_commerce.mapper.UserMapper;
-import com.intern.e_commerce.repository.RoleRepository;
-import com.intern.e_commerce.repository.UserRepositoryInterface;
-import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,10 +16,24 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import com.intern.e_commerce.dto.request.CreateURoleRequest;
+import com.intern.e_commerce.dto.request.PasswordChangingRequest;
+import com.intern.e_commerce.dto.request.UserCreateRequest;
+import com.intern.e_commerce.dto.request.UserUpdateRequest;
+import com.intern.e_commerce.dto.response.*;
+import com.intern.e_commerce.entity.Cart;
+import com.intern.e_commerce.entity.Permission;
+import com.intern.e_commerce.entity.Role;
+import com.intern.e_commerce.entity.UserEntity;
+import com.intern.e_commerce.exception.AppException;
+import com.intern.e_commerce.exception.ErrorCode;
+import com.intern.e_commerce.mapper.PermissionMapper;
+import com.intern.e_commerce.mapper.RoleMapper;
+import com.intern.e_commerce.mapper.UserMapper;
+import com.intern.e_commerce.repository.RoleRepository;
+import com.intern.e_commerce.repository.UserRepositoryInterface;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
@@ -38,6 +46,9 @@ public class UserService {
     private final RoleRepository roleRepository;
 
     private final RoleMapper roleMapper;
+
+    @Autowired
+    private PermissionMapper permissionMapper;
 
     public UserService(
             UserRepositoryInterface userRepository,
@@ -57,6 +68,8 @@ public class UserService {
         Set<Role> roles = new HashSet<>();
         roles.add(roleRepository.findById("USER").orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
         userEntity.setRoles(roles);
+
+        userEntity.setCart(Cart.builder().user(userEntity).build());
         try {
             userEntity = userRepository.save(userEntity);
         } catch (DataIntegrityViolationException e) {
@@ -93,9 +106,6 @@ public class UserService {
         HashSet<Role> rr = new HashSet<>(l);
         userEntity.setRoles(rr);
         UserResponse userResponse = userMapper.toUserResponse(userRepository.save(userEntity));
-        userResponse.setRoles(new HashSet<>(
-                userEntity.getRoles().stream().map(roleMapper::toResponse).toList()));
-
         return userResponse;
     }
 
@@ -109,5 +119,40 @@ public class UserService {
         UserEntity userEntity =
                 userRepository.findByUsername(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
         return userMapper.toUserResponse(userEntity);
+    }
+
+    public UserResponse changePassword(PasswordChangingRequest request) {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        UserEntity user =
+                userRepository.findByUsername(userName).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        if (request.getPassword().equals(request.getPasswordConfirmation())) {
+            user.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
+        } else throw new AppException(ErrorCode.PASSWORD_WRONG);
+        return userMapper.toUserResponse(userRepository.save(user));
+    }
+
+    public CreateURoleResponse createURole(CreateURoleRequest request) {
+        UserEntity userEntity = userRepository
+                .findByUsername(request.getUsername())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        List<Role> roles = roleRepository.findAllById(request.getRoles());
+        userEntity.setRoles(new HashSet<>(roles));
+        return CreateURoleResponse.builder()
+                .name(request.getUsername())
+                .roles(roles.stream().map(roleMapper::toResponse).toList())
+                .build();
+    }
+
+    public UserPermissionRespone getUserPermission(String id) {
+        UserEntity userEntity =
+                userRepository.findById(id).orElseThrow(() -> new AppException(ErrorCode.USER_NOT_EXISTED));
+        List<Role> l = userEntity.getRoles().stream().toList();
+        Set<Permission> se =
+                l.stream().flatMap(role -> role.getPermissions().stream()).collect(Collectors.toSet());
+        return UserPermissionRespone.builder()
+                .username(userEntity.getUsername())
+                .permissions(new HashSet<>(
+                        se.stream().map(permissionMapper::toResponse).toList()))
+                .build();
     }
 }

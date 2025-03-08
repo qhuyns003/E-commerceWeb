@@ -1,4 +1,4 @@
-package com.intern.e_commerce.dto.request;
+package com.intern.e_commerce.dto.response;
 
 import java.util.Set;
 
@@ -10,8 +10,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RoleRequest {
-    String name;
-    String description;
-    Set<String> permissions;
+public class UserPermissionRespone {
+    String username;
+    Set<PermissionResponse> permissions;
 }

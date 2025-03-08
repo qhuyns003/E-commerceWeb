@@ -1,17 +1,21 @@
 package com.intern.e_commerce.dto.request;
 
-import java.util.Set;
+import java.util.List;
+
+import org.springframework.web.multipart.MultipartFile;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class RoleRequest {
+public class ProductUpdateRequest {
     String name;
-    String description;
-    Set<String> permissions;
+    Long price;
+    String unit;
+    List<MultipartFile> images;
 }

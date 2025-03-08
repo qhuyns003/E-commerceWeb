@@ -1,14 +1,16 @@
 package com.intern.e_commerce.dto.request;
 
-import com.intern.e_commerce.validator.DobConstraint;
+import java.time.LocalDate;
+import java.util.Set;
+
 import jakarta.validation.constraints.Size;
+
+import com.intern.e_commerce.validator.DobConstraint;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor

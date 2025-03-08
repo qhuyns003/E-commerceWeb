@@ -1,13 +1,13 @@
 package com.intern.e_commerce.mapper;
 
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 import com.intern.e_commerce.dto.request.UserCreateRequest;
 import com.intern.e_commerce.dto.request.UserUpdateRequest;
 import com.intern.e_commerce.dto.response.UserResponse;
 import com.intern.e_commerce.entity.UserEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {

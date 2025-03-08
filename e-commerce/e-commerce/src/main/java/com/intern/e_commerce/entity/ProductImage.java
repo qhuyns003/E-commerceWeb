@@ -1,14 +1,9 @@
 package com.intern.e_commerce.entity;
 
-
 import jakarta.persistence.*;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 @Entity
 @Data
@@ -24,5 +19,4 @@ public class ProductImage extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
-
 }

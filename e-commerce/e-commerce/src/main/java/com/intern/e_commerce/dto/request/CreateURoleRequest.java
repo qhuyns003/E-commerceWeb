@@ -1,5 +1,7 @@
 package com.intern.e_commerce.dto.request;
 
+import java.util.List;
+
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -8,7 +10,7 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class OrderDetailCreateRequest {
-    Long productId;
-    Long quantity;
+public class CreateURoleRequest {
+    String username;
+    List<String> roles;
 }
