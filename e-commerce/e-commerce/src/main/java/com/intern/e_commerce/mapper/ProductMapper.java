@@ -14,6 +14,7 @@ public interface ProductMapper {
 
     //    @Mapping(target = "lastName",ignore = true)
     @Mapping(target = "images", ignore = true)
+    @Mapping(target = "category", ignore = true)
     Product toProduct(ProductCreateRequest productCreateRequest);
 
     //    @Mapping(target = "roles", ignore = true)
@@ -21,6 +22,7 @@ public interface ProductMapper {
     //    @Mapping(source = "firstName",target = "lastName")
     //    @Mapping(target = "roles", ignore = true)
     @Mapping(target = "images", ignore = true)
+    @Mapping(target = "category", ignore = true)
     ProductResponse toProductResponse(Product product);
 
     @Mapping(target = "images", ignore = true)
