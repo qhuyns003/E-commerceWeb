@@ -1,15 +1,13 @@
 package com.intern.e_commerce.mapper;
 
-
-import com.intern.e_commerce.dto.request.CreateURoleRequest;
-import com.intern.e_commerce.dto.request.UserCreateRequest;
-import com.intern.e_commerce.dto.request.UserUpdateRequest;
-import com.intern.e_commerce.dto.response.CreateURoleResponse;
-import com.intern.e_commerce.dto.response.UserResponse;
-import com.intern.e_commerce.entity.UserEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+
+import com.intern.e_commerce.dto.request.UserCreateRequest;
+import com.intern.e_commerce.dto.request.UserUpdateRequest;
+import com.intern.e_commerce.dto.response.UserResponse;
+import com.intern.e_commerce.entity.UserEntity;
 
 @Mapper(componentModel = "spring")
 public interface UserMapper {
@@ -23,5 +21,4 @@ public interface UserMapper {
     //    @Mapping(source = "firstName",target = "lastName")
     @Mapping(target = "roles", ignore = true)
     UserResponse toUserResponse(UserEntity userEntity);
-
 }
