@@ -2,7 +2,14 @@ package com.intern.e_commerce.controller;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.intern.e_commerce.entity.Orders;
+import com.intern.e_commerce.exception.AppException;
+import com.intern.e_commerce.exception.ErrorCode;
+import com.intern.e_commerce.repository.OrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +22,18 @@ import com.intern.e_commerce.configuration.QRGenerator;
 
 @RestController
 public class QRController {
+    @Autowired
+    private OrderRepository orderRepository;
+
     @GetMapping("/generate-qr")
     public ResponseEntity<byte[]> generateQR(
+            @RequestParam Long orderId,
             @RequestParam String accountNumber,
-            @RequestParam(required = false) String amount,
+//            @RequestParam(required = false) String amount,
             @RequestParam(required = false) String description)
             throws WriterException, IOException {
 
-        String vietQRContent = generateVietQR(accountNumber, amount, description);
+        String vietQRContent = generateVietQR(orderId,accountNumber, description);
         byte[] qrImage = QRGenerator.generateQRCode(vietQRContent, 300, 300);
 
         HttpHeaders headers = new HttpHeaders();
@@ -30,7 +41,7 @@ public class QRController {
         return ResponseEntity.ok().headers(headers).body(qrImage);
     }
 
-    private String generateVietQR(String accountNumber, String amount, String description) {
+    private String generateVietQR(Long orderId, String accountNumber, String description) {
         StringBuilder qrData = new StringBuilder();
 
         // Phiên bản EMVCo & Loại giao dịch (QR IBFT - Chuyển khoản)
@@ -55,6 +66,10 @@ public class QRController {
         qrData.append("5303704");
 
         // Số tiền (nếu có)
+        List<Long> prices = new ArrayList<>();
+        Orders orders = orderRepository.findById(orderId).orElseThrow(() -> new AppException(ErrorCode.ORDER_NOT_FOUND));
+        orders.getOrderDetailList().stream().forEach(orderDetail -> prices.add(orderDetail.getPrice()*orderDetail.getQuantity()));
+        String amount = prices.stream().mapToLong(Long::longValue).sum()+"";
         if (amount != null && !amount.isEmpty()) {
             // Định dạng số tiền với dấu phẩy mỗi 3 số từ cuối lên
             amount = formatAmountWithCommas(amount);
