@@ -1,12 +1,14 @@
 package com.intern.e_commerce.controller;
 
+import org.springframework.web.bind.annotation.*;
+
 import com.intern.e_commerce.dto.request.MailStructure;
 import com.intern.e_commerce.service.MailService;
+
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
@@ -22,5 +24,4 @@ public class MailController {
         mailService.sendMail(mail, mailStructure);
         return "Successfully sent mail !!";
     }
-
 }
