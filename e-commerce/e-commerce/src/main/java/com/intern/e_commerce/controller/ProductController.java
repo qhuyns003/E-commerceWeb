@@ -3,7 +3,6 @@ package com.intern.e_commerce.controller;
 import java.io.IOException;
 import java.util.List;
 
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +16,7 @@ import com.intern.e_commerce.dto.response.ApiResponse;
 import com.intern.e_commerce.dto.response.ProductResponse;
 import com.intern.e_commerce.service.ProductService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -61,7 +61,7 @@ public class ProductController {
                 .build();
     }
 
-    @Operation(summary = "Xóa sản phẩm có id trên url", description = "")
+    @Operation(summary = "Xóa sản phẩm có id trên url", description = "không build")
     @DeleteMapping("/{id}")
     ApiResponse<String> deleteProduct(@PathVariable Long id) {
         productService.deleteProduct(id);

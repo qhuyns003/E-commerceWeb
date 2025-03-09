@@ -2,7 +2,6 @@ package com.intern.e_commerce.controller;
 
 import java.text.ParseException;
 
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 
 import com.intern.e_commerce.dto.request.AuthenticationRequest;
@@ -16,6 +15,7 @@ import com.intern.e_commerce.dto.response.RefreshTokenResponse;
 import com.intern.e_commerce.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -45,7 +45,6 @@ public class AuthenticationController {
         authentication.logout(logoutRequest.getToken());
         return ApiResponse.<String>builder().result("successful").build();
     }
-
 
     @PostMapping("/introspect")
     ApiResponse<IntrospectResponse> introspectUser(@RequestBody IntrospectRequest introspectRequest)
