@@ -18,4 +18,5 @@ public class ProductCreateRequest {
     Long price;
     String unit;
     List<MultipartFile> images;
+    Long categoryId;
 }
