@@ -2,7 +2,6 @@ package com.intern.e_commerce.controller;
 
 import java.util.List;
 
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +10,7 @@ import com.intern.e_commerce.dto.response.ApiResponse;
 import com.intern.e_commerce.dto.response.OrderResponse;
 import com.intern.e_commerce.service.OrderService;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -49,7 +49,10 @@ public class OrderController {
         return ApiResponse.builder().result("success").build();
     }
 
-    @Operation(summary = "View order sau khi bấm thanh toán", description = "Giao diện hiện lên gồm các sản phẩm -> chọn số lượng sản phẩm cũng như phương thức thanh toán,...")
+    @Operation(
+            summary = "View order sau khi bấm thanh toán",
+            description =
+                    "Giao diện hiện lên gồm các sản phẩm -> chọn số lượng sản phẩm cũng như phương thức thanh toán,...")
     @GetMapping("/payment")
     public ApiResponse<?> getPaymentOrder(@RequestParam List<Long> ids) {
         return ApiResponse.builder().result(orderService.getPaymentOrder(ids)).build();

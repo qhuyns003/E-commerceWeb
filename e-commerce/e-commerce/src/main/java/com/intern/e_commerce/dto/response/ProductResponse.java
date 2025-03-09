@@ -18,4 +18,5 @@ public class ProductResponse {
     Long price;
     String unit;
     List<String> images;
+    String category;
 }

@@ -1,5 +1,12 @@
 package com.intern.e_commerce.controller;
 
+import java.util.List;
+
+import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import com.intern.e_commerce.dto.request.CategoryCreateRequest;
 import com.intern.e_commerce.dto.request.CategoryUpdateRequest;
@@ -7,16 +14,10 @@ import com.intern.e_commerce.dto.request.UserCreateRequest;
 import com.intern.e_commerce.dto.request.UserUpdateRequest;
 import com.intern.e_commerce.dto.response.ApiResponse;
 import com.intern.e_commerce.dto.response.CategoryResponse;
-import com.intern.e_commerce.dto.response.UserResponse;
 import com.intern.e_commerce.service.CategoryService;
-import com.intern.e_commerce.service.UserService;
-import io.swagger.v3.oas.annotations.Operation;
-import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
@@ -41,7 +42,9 @@ public class CategoryController {
                 .build();
     }
 
-    @Operation(summary = "Xóa danh mục theo id trên url", description = "Lưu ý khi xóa danh mục là tất cả sản phẩ mlieen quan cũng bị xóa theo")
+    @Operation(
+            summary = "Xóa danh mục theo id trên url",
+            description = "Lưu ý khi xóa danh mục là tất cả sản phẩm liên quan cũng bị xóa theo")
     @DeleteMapping("/{categoryId}")
     ApiResponse<String> deleteCategory(@PathVariable long categoryId) {
         categoryService.deleteCategory(categoryId);
