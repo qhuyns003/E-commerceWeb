@@ -15,8 +15,11 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -40,21 +43,39 @@ public class SecurityConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeHttpRequests(request -> request.requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT)
-                .permitAll()
-                .requestMatchers(SWAGGER_ENDPOINT)
-                .permitAll()
-                //                        .requestMatchers(HttpMethod.GET,"/users")
-                //                        .hasAuthority("ROLE_ADMIN")
-                //                        .hasRole(Role.ADMIN.name())
-                .anyRequest()
-                .authenticated());
-        httpSecurity.csrf(AbstractHttpConfigurer::disable);
-        httpSecurity.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwtConfigurer ->
-                        jwtConfigurer.decoder(jwtDecoder).jwtAuthenticationConverter(jwtAuthenticationConverter()))
-                .authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
-        return httpSecurity.build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) //  Cấu hình CORS
+                .csrf(csrf -> csrf.disable())//  Tắt CSRF nếu dùng API stateless
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll() //  Public endpoints
+                        .requestMatchers(SWAGGER_ENDPOINT).permitAll()
+                        .requestMatchers("/api/identity/auth/**").permitAll() //  Cho phép API login
+                        .anyRequest().authenticated() //  Yêu cầu xác thực với các request còn lại
+                )
+                .oauth2ResourceServer(oauth2 -> oauth2
+                        .jwt(jwtConfigurer -> jwtConfigurer
+                                .decoder(jwtDecoder) //  Sử dụng JWT Decoder tùy chỉnh
+                                .jwtAuthenticationConverter(jwtAuthenticationConverter())
+                        )
+                        .authenticationEntryPoint(new JwtAuthenticationEntryPoint()) //  Trả về lỗi 401 Unauthorized
+                );
+
+        return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:3000"));
+        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+
+        return source;
     }
 
     @Bean
@@ -72,16 +93,17 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(10);
     }
 
-    @Bean
-    public CorsFilter corsFilter() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.addAllowedOrigin("*");
-        corsConfiguration.addAllowedHeader("*");
-        corsConfiguration.addAllowedMethod("*");
+//    @Bean
+//    public CorsFilter corsFilter() {
+//        CorsConfiguration corsConfiguration = new CorsConfiguration();
+//        corsConfiguration.addAllowedOrigin("*");
+//        corsConfiguration.addAllowedHeader("*");
+//        corsConfiguration.addAllowedMethod("*");
+//
+//        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+//        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+//
+//        return new CorsFilter(urlBasedCorsConfigurationSource);
+//    }
 
-        UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
-
-        return new CorsFilter(urlBasedCorsConfigurationSource);
-    }
 }
