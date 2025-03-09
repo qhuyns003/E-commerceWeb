@@ -67,7 +67,7 @@ public class ProductService {
             productImage.setProduct(product);
             product.getImages().add(productImage);
         }
-        product.setCategory(categoryRepository.findById(productCreateRequest.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.PRODUCT_NOT_FOUND)));
+        product.setCategory(categoryRepository.findById(productCreateRequest.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.CATEGORY_NOT_EXISTED)));
         ProductResponse productResponse = productMapper.toProductResponse(productRepository.save(product));
         productResponse.setImages(product.getImages().stream()
                 .map(multiPart -> multiPart.getUrl())
