@@ -12,6 +12,9 @@ import com.intern.e_commerce.enums.ShippingMethod;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -37,4 +40,8 @@ public class Orders extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "order", cascade = CascadeType.ALL)
     List<OrderDetail> orderDetailList = new ArrayList<>();
+
+
+
+
 }

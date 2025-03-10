@@ -74,7 +74,6 @@ public class UserService {
         } catch (Exception e) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
-        log.info("test branch");
         return userMapper.toUserResponse(userEntity);
     }
 
