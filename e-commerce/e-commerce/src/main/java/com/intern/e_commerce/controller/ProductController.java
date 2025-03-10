@@ -45,10 +45,17 @@ public class ProductController {
     }
 
     @Operation(summary = "Tìm kiếm theo tên sản phẩm", description = "")
-    @GetMapping("/search")
+    @GetMapping("/searching-by-name")
     public ApiResponse<List<ProductResponse>> findProductByName(@Param("keyword") String keyword) {
         return ApiResponse.<List<ProductResponse>>builder()
                 .result(productService.findProductByName(keyword))
+                .build();
+    }
+
+    @GetMapping("/{categoryId}")
+    public ApiResponse<List<ProductResponse>> findProductByCategoryId(@PathVariable("categoryId") Long id) {
+        return ApiResponse.<List<ProductResponse>>builder()
+                .result(productService.findProductByCategoryId(id))
                 .build();
     }
 
