@@ -29,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Transactional
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
