@@ -37,7 +37,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Transactional
 public class UserService {
     private final UserRepositoryInterface userRepository;
 
@@ -72,10 +71,9 @@ public class UserService {
         userEntity.setCart(Cart.builder().user(userEntity).build());
         try {
             userEntity = userRepository.save(userEntity);
-        } catch (DataIntegrityViolationException e) {
+        } catch (Exception e) {
             throw new AppException(ErrorCode.USER_EXISTED);
         }
-        log.info("test branch");
         return userMapper.toUserResponse(userEntity);
     }
 

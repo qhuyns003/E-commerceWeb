@@ -8,6 +8,7 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.intern.e_commerce.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Transactional
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
@@ -38,6 +38,9 @@ public class ProductService {
 
     @Autowired
     private ProductMapper productMapper;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     private static final Path CURRENT_FOLDER = Paths.get(System.getProperty("user.dir"));
 
@@ -63,10 +66,12 @@ public class ProductService {
             productImage.setProduct(product);
             product.getImages().add(productImage);
         }
+        product.setCategory(categoryRepository.findById(productCreateRequest.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.CATEGORY_NOT_EXISTED)));
         ProductResponse productResponse = productMapper.toProductResponse(productRepository.save(product));
         productResponse.setImages(product.getImages().stream()
                 .map(multiPart -> multiPart.getUrl())
                 .toList());
+        productResponse.setCategory(categoryRepository.findById(productCreateRequest.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.PRODUCT_NOT_FOUND)).getName());
         return productResponse;
     }
 
@@ -122,4 +127,13 @@ public class ProductService {
                 .collect(Collectors.toList());
         return productResponses;
     }
+
+    public List<ProductResponse> findProductByCategoryId(Long id) {
+        List<Product> products = productRepository.findProductByCategoryId(id);
+        List<ProductResponse> productResponses = products.stream()
+                .map(product -> productMapper.toProductResponse(product))
+                .collect(Collectors.toList());
+        return productResponses;
+    }
+
 }

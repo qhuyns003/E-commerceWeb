@@ -2,6 +2,8 @@ package com.intern.e_commerce.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -21,7 +23,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Transactional
 public class CategoryService {
     private final CategoryRepository categoryRepository;
     private final CategoryMapper categoryMapper;
@@ -33,8 +34,6 @@ public class CategoryService {
 
     public CategoryResponse createCategory(CategoryCreateRequest categoryCreateRequest) {
         Category category = categoryMapper.toCategory(categoryCreateRequest);
-        category.setName(categoryCreateRequest.getName());
-        // khong clean
         try {
             category = categoryRepository.save(category);
         } catch (DataIntegrityViolationException e) {
@@ -45,13 +44,9 @@ public class CategoryService {
 
     @PreAuthorize("hasRole('ADMIN')")
     public List<CategoryResponse> getCategory() {
-        List<Category> userEntity = categoryRepository.findAll();
-        List<CategoryResponse> categoryResponse = new ArrayList<>();
-        for (Category category1 : userEntity) {
-            categoryResponse.add(categoryMapper.toCategoryResponse(category1));
-        }
-        // dung stream
-        return categoryResponse;
+        return categoryRepository.findAll().stream()
+                .map(categoryMapper::toCategoryResponse)
+                .toList();
     }
 
     @PreAuthorize("hasRole('ADMIN')")
