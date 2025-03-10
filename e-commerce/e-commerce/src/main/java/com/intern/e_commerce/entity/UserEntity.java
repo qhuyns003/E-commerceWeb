@@ -30,6 +30,7 @@ public class UserEntity {
     String firstName;
     String lastName;
     LocalDate dob;
+    String email;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(

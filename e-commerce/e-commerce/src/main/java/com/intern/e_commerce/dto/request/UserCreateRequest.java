@@ -2,6 +2,7 @@ package com.intern.e_commerce.dto.request;
 
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 
 import org.springframework.format.annotation.DateTimeFormat;
@@ -28,6 +29,10 @@ public class UserCreateRequest {
 
     String firstName;
     String lastName;
+
+    @Email
+    String email;
+
 
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "MM/dd/yyyy")

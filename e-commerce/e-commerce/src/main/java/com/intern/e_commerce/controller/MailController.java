@@ -23,4 +23,10 @@ public class MailController {
         return "Successfully sent mail !!";
     }
 
+    @PostMapping("/customer/{id}")
+    public String sendToCustomer(@PathVariable Integer id) {
+        mailService.sendToCustomer(id);
+        return "Successfully sent customer !!";
+    }
+
 }
