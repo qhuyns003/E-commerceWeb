@@ -132,4 +132,13 @@ public class ProductService {
                 .collect(Collectors.toList());
         return productResponses;
     }
+
+    public List<ProductResponse> findProductByCategoryId(Long id) {
+        List<Product> products = productRepository.findProductByCategoryId(id);
+        List<ProductResponse> productResponses = products.stream()
+                .map(product -> productMapper.toProductResponse(product))
+                .collect(Collectors.toList());
+        return productResponses;
+    }
+
 }
