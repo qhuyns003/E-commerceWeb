@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.intern.e_commerce.enums.AuthProvider;
 import jakarta.persistence.*;
 
 import lombok.*;
@@ -18,12 +19,16 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Table(
+        name = "user_entity",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"username", "auth_provider"})
+)
 public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     String id;
 
-    @Column(name = "username", unique = true, columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
+    @Column(name = "username",  columnDefinition = "VARCHAR(255) COLLATE utf8mb4_unicode_ci")
     String username;
 
     String password;
@@ -31,7 +36,9 @@ public class UserEntity {
     String lastName;
     LocalDate dob;
     String email;
-
+    @Enumerated(EnumType.STRING)
+    @Column(name = "auth_provider")
+    AuthProvider authProvider;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_role",

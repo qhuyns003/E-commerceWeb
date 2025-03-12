@@ -15,6 +15,6 @@ public interface UserRepositoryInterface extends JpaRepository<UserEntity, Strin
     List<UserEntity> findAll();
 
     boolean existsByUsername(String username);
-
+    Optional<UserEntity> findByEmail(String email);
     Optional<UserEntity> findByUsername(String username);
 }

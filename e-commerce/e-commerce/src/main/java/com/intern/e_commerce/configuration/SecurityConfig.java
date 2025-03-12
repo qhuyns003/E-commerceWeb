@@ -49,10 +49,17 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())//  Tắt CSRF nếu dùng API stateless
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.POST, PUBLIC_ENDPOINT).permitAll() //  Public endpoints
+                        .requestMatchers("/", "/login").permitAll()
+
                         .requestMatchers(SWAGGER_ENDPOINT).permitAll()
                         .requestMatchers("/api/identity/auth/**").permitAll() //  Cho phép API login
                         .anyRequest().authenticated() //  Yêu cầu xác thực với các request còn lại
                 )
+                .oauth2Login(oauth2 -> oauth2
+                        .defaultSuccessUrl("/home", true)
+                )
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/"))
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwtConfigurer -> jwtConfigurer
                                 .decoder(jwtDecoder) //  Sử dụng JWT Decoder tùy chỉnh
