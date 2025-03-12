@@ -52,6 +52,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/identity/auth/**")
                                 .permitAll() //  Cho phép API login
                                 .requestMatchers("/auth/google").permitAll()
+                                .requestMatchers("/auth/facebook-login").permitAll()
                                 .anyRequest()
                                 .authenticated() //  Yêu cầu xác thực với các request còn lại
                         )
