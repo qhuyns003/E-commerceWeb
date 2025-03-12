@@ -19,5 +19,6 @@ public class RegisterController {
         String name = oauth2User.getAttribute("name"); // Lấy tên từ Google
         model.addAttribute("name", name);
         return "home";
+
     }
 }
