@@ -3,6 +3,7 @@ package com.intern.e_commerce.configuration;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.intern.e_commerce.enums.AuthProvider;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
@@ -100,6 +101,7 @@ public class ApplicationConfig {
                 UserEntity userEntity = UserEntity.builder()
                         .username(userName)
                         .password(passwordEncoder.encode("admin"))
+                        .authProvider(AuthProvider.LOCAL)
                         .roles(roles)
                         .build();
                 userEntity.setCart(Cart.builder().user(userEntity).build());

@@ -23,7 +23,8 @@ public enum ErrorCode {
     CATEGORY_EXISTED(1014, "Category already existed", HttpStatus.BAD_GATEWAY),
     CATEGORY_NOT_EXISTED(1015, "Category is not existed", HttpStatus.BAD_GATEWAY),
     PASSWORD_WRONG(1016, "You must check your password again", HttpStatus.BAD_REQUEST),
-    PRODUCT_EXISTED(1017, "Product already existed", HttpStatus.BAD_REQUEST);
+    PRODUCT_EXISTED(1017, "Product already existed", HttpStatus.BAD_REQUEST),
+    MAIL_EXISTED(1018, "Mail already existed", HttpStatus.BAD_REQUEST);
 
     private Integer code;
     private String message;
