@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import com.intern.e_commerce.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +21,7 @@ import com.intern.e_commerce.entity.ProductImage;
 import com.intern.e_commerce.exception.AppException;
 import com.intern.e_commerce.exception.ErrorCode;
 import com.intern.e_commerce.mapper.ProductMapper;
+import com.intern.e_commerce.repository.CategoryRepository;
 import com.intern.e_commerce.repository.ProductRepository;
 import com.intern.e_commerce.repository.UserRepositoryInterface;
 
@@ -29,7 +29,6 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-@Transactional
 public class ProductService {
     @Autowired
     private ProductRepository productRepository;
@@ -67,12 +66,17 @@ public class ProductService {
             productImage.setProduct(product);
             product.getImages().add(productImage);
         }
-        product.setCategory(categoryRepository.findById(productCreateRequest.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.CATEGORY_NOT_EXISTED)));
+        product.setCategory(categoryRepository
+                .findById(productCreateRequest.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.CATEGORY_NOT_EXISTED)));
         ProductResponse productResponse = productMapper.toProductResponse(productRepository.save(product));
         productResponse.setImages(product.getImages().stream()
                 .map(multiPart -> multiPart.getUrl())
                 .toList());
-        productResponse.setCategory(categoryRepository.findById(productCreateRequest.getCategoryId()).orElseThrow(()->new AppException(ErrorCode.PRODUCT_NOT_FOUND)).getName());
+        productResponse.setCategory(categoryRepository
+                .findById(productCreateRequest.getCategoryId())
+                .orElseThrow(() -> new AppException(ErrorCode.PRODUCT_NOT_FOUND))
+                .getName());
         return productResponse;
     }
 

@@ -144,6 +144,35 @@
 			<version>3.4.1</version>
 		</dependency>
 
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-client</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.api-client</groupId>
+			<artifactId>google-api-client</artifactId>
+			<version>1.33.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.oauth-client</groupId>
+			<artifactId>google-oauth-client-jetty</artifactId>
+			<version>1.33.0</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.google.http-client</groupId>
+			<artifactId>google-http-client-jackson2</artifactId>
+			<version>1.39.2</version>
+		</dependency>
+
+<!--		<dependency>-->
+<!--			<groupId>com.google.http-client</groupId>-->
+<!--			<artifactId>google-http-client</artifactId>-->
+<!--			<version>1.42.2</version>-->
+<!--		</dependency>-->
+
 
 	</dependencies>
 

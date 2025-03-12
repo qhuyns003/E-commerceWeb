@@ -1,5 +1,7 @@
 package com.intern.e_commerce.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -8,9 +10,6 @@ import jakarta.persistence.OneToMany;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Data
@@ -23,8 +22,6 @@ import java.util.List;
 public class Category extends BaseEntity {
     String name;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category",cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "category", cascade = CascadeType.ALL)
     List<Product> orderDetailList = new ArrayList<>();
-
-
 }

@@ -2,7 +2,6 @@ package com.intern.e_commerce.controller;
 
 import java.util.List;
 
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,8 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import com.intern.e_commerce.dto.request.CategoryCreateRequest;
 import com.intern.e_commerce.dto.request.CategoryUpdateRequest;
-import com.intern.e_commerce.dto.request.UserCreateRequest;
-import com.intern.e_commerce.dto.request.UserUpdateRequest;
 import com.intern.e_commerce.dto.response.ApiResponse;
 import com.intern.e_commerce.dto.response.CategoryResponse;
 import com.intern.e_commerce.service.CategoryService;
@@ -60,8 +57,4 @@ public class CategoryController {
                 .result(categoryService.updateCategory(categoryId, categoryUpdateRequest))
                 .build();
     }
-
-
-
-    
 }
