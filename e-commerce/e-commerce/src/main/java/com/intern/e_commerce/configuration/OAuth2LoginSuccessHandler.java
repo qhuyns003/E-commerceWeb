@@ -105,6 +105,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         }
     }
 
+
     String buildScope(UserEntity user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
         if (!user.getRoles().isEmpty()) {
