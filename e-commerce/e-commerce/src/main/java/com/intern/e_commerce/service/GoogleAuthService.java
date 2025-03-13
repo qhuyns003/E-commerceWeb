@@ -41,8 +41,6 @@ public class GoogleAuthService {
         this.roleRepository = roleRepository;
         this.authenticationService = authenticationService;
     }
-
-
     public String googleLogin(String code) throws IOException {
         GoogleTokenResponse tokenResponse = null; // Khai báo trước để tránh lỗi
         try {
@@ -58,30 +56,24 @@ public class GoogleAuthService {
         } catch (Exception e) {
 //             e.printStackTrace();
 //             return ResponseEntity.badRequest().body("Lỗi xác thực với Google!");
-
         }
-
         if (tokenResponse == null) {
 //             return ResponseEntity.badRequest().body("Không nhận được phản
-
         }
-
         String idTokenString = tokenResponse.getIdToken();
         GoogleIdToken.Payload payload = verifyGoogleToken(idTokenString);
-
         if (payload == null) {
 //             return ResponseEntity.badRequest().body("Token không hợp lệ!");
         }
-
-        String email = payload.getEmail();
-        Optional<UserEntity> userOptional = userRepository.findByUsername(email);
+        String id = payload.getSubject();
+        Optional<UserEntity> userOptional = userRepository.findByUsername(id);
 
         UserEntity user;
         if (userOptional.isPresent()) {
             user = userOptional.get();
         } else {
             user = new UserEntity();
-            user.setUsername(email);
+            user.setUsername(id);
             user.setFirstName((String) payload.get("name"));
             Set<Role> roleSet = new HashSet<>();
             roleSet.add(roleRepository.findById(com.intern.e_commerce.enums.Role.USER.name()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
