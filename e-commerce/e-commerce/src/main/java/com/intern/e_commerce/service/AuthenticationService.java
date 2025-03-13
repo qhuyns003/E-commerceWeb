@@ -134,7 +134,7 @@ public class AuthenticationService {
         return signedJWT;
     }
 
-    String generateToken(UserEntity user) {
+    public String generateToken(UserEntity user) {
         JWSHeader header = new JWSHeader(JWSAlgorithm.HS512);
         JWTClaimsSet jwtClaimsSet = new JWTClaimsSet.Builder()
                 .subject(user.getUsername())
@@ -166,4 +166,7 @@ public class AuthenticationService {
         }
         return stringJoiner.toString();
     }
+
+
+
 }
