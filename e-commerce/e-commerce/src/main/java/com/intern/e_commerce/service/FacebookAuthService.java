@@ -38,32 +38,27 @@ public class FacebookAuthService {
     public String facebookLogin(String code) {
         // 1. Lấy access token từ Facebook
         String accessToken = getFacebookAccessToken(code);
-
         // 2. Lấy thông tin user từ Facebook
         Map<String, String> userInfo = getFacebookUserInfo(accessToken);
-
-        String email = userInfo.get("id");
+        String id = userInfo.get("id");
         String name = userInfo.get("name");
-
-        if (email == null) {
+        if (id == null) {
             throw new AppException(ErrorCode.UNCATEGORIZED_EXCEPTION);
         }
-
         // 3. Kiểm tra user trong database
-        Optional<UserEntity> userOptional = userRepository.findByUsername(email);
+        Optional<UserEntity> userOptional = userRepository.findByUsername(id);
         UserEntity user;
         if (userOptional.isPresent()) {
             user = userOptional.get();
         } else {
             user = new UserEntity();
-            user.setUsername(email);
+            user.setUsername(id);
             user.setFirstName(name);
             Set<Role> roleSet = new HashSet<>();
             roleSet.add(roleRepository.findById(com.intern.e_commerce.enums.Role.USER.name()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
             user.setRoles(roleSet);
             userRepository.save(user);
         }
-
         // 4. Tạo JWT token
         return authenticationService.generateToken(user);
     }

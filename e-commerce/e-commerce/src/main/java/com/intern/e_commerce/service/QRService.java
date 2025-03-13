@@ -31,11 +31,9 @@ public class QRService {
     }
     private String generateVietQR(Long orderId, String accountNumber, String description) {
         StringBuilder qrData = new StringBuilder();
-
         // Phiên bản EMVCo & Loại giao dịch (QR IBFT - Chuyển khoản)
         qrData.append("000201");
         qrData.append("010212"); // 12 = QR IBFT, 11 = Thanh toán
-
         // Mã VietQR & Napas
         qrData.append("38560010A0000007270126");
 
@@ -84,7 +82,7 @@ public class QRService {
             qrData.append(description); // Ghi nội dung mô tả
         }
 
-        // Thêm mã kiểm tra CRC16
+        // Thêm mã kiểm tra CRC16 (False)
         String dataForCRC = qrData.toString() + "6304"; // Thêm "6304" trước khi tính CRC
         String crc16 = generateCRC16(dataForCRC);
         qrData.append("6304").append(crc16);
