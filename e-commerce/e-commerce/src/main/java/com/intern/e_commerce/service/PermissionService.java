@@ -3,7 +3,6 @@ package com.intern.e_commerce.service;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.intern.e_commerce.dto.request.PermissionRequest;
 import com.intern.e_commerce.dto.request.PermissionUpdateRequest;

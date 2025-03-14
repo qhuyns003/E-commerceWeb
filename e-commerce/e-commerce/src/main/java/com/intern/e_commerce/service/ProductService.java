@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.intern.e_commerce.dto.request.ProductCreateRequest;
@@ -85,9 +84,18 @@ public class ProductService {
         if (products.isEmpty()) {
             throw new AppException(ErrorCode.PRODUCT_NOT_FOUND);
         }
-        List<ProductResponse> productResponses = products.stream()
-                .map(product -> productMapper.toProductResponse(product))
-                .collect(Collectors.toList());
+        //        List<ProductResponse> productResponses = products.stream()
+        //                .map(product -> productMapper.toProductResponse(product))
+        //                .collect(Collectors.toList());
+        List<ProductResponse> productResponses = new ArrayList<>();
+        for (Product product : products) {
+            ProductResponse productResponse = productMapper.toProductResponse(product);
+            List<String> productImages =
+                    product.getImages().stream().map(ProductImage::getUrl).collect(Collectors.toList());
+            productResponse.setImages(productImages);
+            productResponses.add(productResponse);
+        }
+        ;
         return productResponses;
     }
 
@@ -140,5 +148,4 @@ public class ProductService {
                 .collect(Collectors.toList());
         return productResponses;
     }
-
 }

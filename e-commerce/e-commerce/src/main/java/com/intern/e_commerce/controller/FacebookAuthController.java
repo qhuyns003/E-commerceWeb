@@ -1,9 +1,9 @@
 package com.intern.e_commerce.controller;
 
+import org.springframework.web.bind.annotation.*;
+
 import com.intern.e_commerce.dto.response.ApiResponse;
 import com.intern.e_commerce.service.FacebookAuthService;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
@@ -18,9 +18,6 @@ public class FacebookAuthController {
     @GetMapping("/facebook-login")
     public ApiResponse<String> facebookLogin(@RequestParam String code) {
         String jwt = facebookAuthService.facebookLogin(code);
-        return ApiResponse.<String>builder()
-                .result(jwt)
-                .build();
+        return ApiResponse.<String>builder().result(jwt).build();
     }
 }
-
