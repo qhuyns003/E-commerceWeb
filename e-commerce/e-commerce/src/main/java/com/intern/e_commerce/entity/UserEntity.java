@@ -36,6 +36,7 @@ public class UserEntity {
     String lastName;
     LocalDate dob;
     String email;
+    String socialId;
     @Enumerated(EnumType.STRING)
     @Column(name = "auth_provider")
     AuthProvider authProvider;

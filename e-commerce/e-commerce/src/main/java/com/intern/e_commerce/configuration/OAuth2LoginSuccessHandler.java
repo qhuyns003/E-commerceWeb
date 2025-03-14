@@ -1,5 +1,6 @@
 package com.intern.e_commerce.configuration;
 
+import com.intern.e_commerce.entity.Cart;
 import com.intern.e_commerce.entity.Role;
 import com.intern.e_commerce.entity.UserEntity;
 import com.intern.e_commerce.enums.AuthProvider;
@@ -23,7 +24,6 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -46,8 +46,6 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
     @NonFinal
     int validDuration;
 
-
-    // Đánh dấu @Transactional để đảm bảo các entity lazy được load trong transaction
     @Override
     @Transactional
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -56,32 +54,59 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String email = oauthUser.getAttribute("email");
         String name = oauthUser.getAttribute("name");
 
-        if (email == null || name == null) {
-            throw new AppException(ErrorCode.OAUTH2_AUTHENTICATION_FAILED);
+        String provider = getAuthProvider(request, oauthUser);
+        AuthProvider authProviderEnum = AuthProvider.valueOf(provider.toUpperCase());
+        String socialId;
+        if (authProviderEnum == AuthProvider.GOOGLE) {
+            socialId = oauthUser.getAttribute("sub").toString();
+        } else if (authProviderEnum == AuthProvider.FACEBOOK) {
+            socialId = oauthUser.getAttribute("id").toString();
+        } else {
+            socialId = null;
         }
 
-        UserEntity userEntity = userRepository.findByEmail(email)
+        UserEntity userEntity = userRepository.findBySocialIdAndAndAuthProvider(socialId,authProviderEnum)
                 .orElseGet(() -> {
                     Set<Role> roles = new HashSet<>();
                     roles.add(roleRepository.findById("USER")
                             .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
 
-                    return userRepository.save(UserEntity.builder()
+                    UserEntity user=UserEntity.builder()
                             .email(email)
-                            .username(name)
+                            .username(socialId)
                             .roles(roles)
-                            .authProvider(AuthProvider.GOOGLE)
+                            .authProvider(authProviderEnum)
+                            .socialId(socialId)
+                            .build();
+                    user.setCart(Cart.builder()
+                            .user(user)
                             .build());
+                    return userRepository.save(user);
                 });
 
-
-        // Tạo token
         String token = generateToken(userEntity);
 
-        // Trả token trực tiếp thay vì redirect
-        response.setContentType("text/html");
-        response.getWriter().write("<h1>Token: " + token + "</h1>");
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
+        response.getWriter().write("{\"accessToken\": \"" + token + "\"}");
     }
+
+    private String getAuthProvider(HttpServletRequest request, OAuth2User oauthUser) {
+        System.out.println("OAuth2 Attributes: " + oauthUser.getAttributes());
+
+        String id = oauthUser.getAttribute("id");
+        if (id != null) {
+            return "FACEBOOK";
+        }
+
+        String sub = oauthUser.getAttribute("sub");
+        if (sub != null && sub.matches("^\\d+$")) { // Google sub thường là số
+            return "GOOGLE";
+        }
+
+        return "LOCAL"; // Mặc định
+    }
+
 
 
     String generateToken(UserEntity user) {
@@ -90,14 +115,13 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
                 .subject(user.getUsername())
                 .issuer(".com")
                 .issueTime(new Date())
-                .expirationTime(new Date(
-                        Instant.now().plus(validDuration, ChronoUnit.SECONDS).toEpochMilli()))
+                .expirationTime(Date.from(Instant.now().plus(validDuration, ChronoUnit.SECONDS)))
                 .claim("scope", buildScope(user))
                 .jwtID(UUID.randomUUID().toString())
                 .build();
-        Payload payload = new Payload(jwtClaimsSet.toJSONObject());
-        JWSObject jwsObject = new JWSObject(header, payload);
+
         try {
+            JWSObject jwsObject = new JWSObject(header, new Payload(jwtClaimsSet.toJSONObject()));
             jwsObject.sign(new MACSigner(signerKey.getBytes()));
             return jwsObject.serialize();
         } catch (JOSEException e) {
@@ -105,10 +129,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         }
     }
 
-
     String buildScope(UserEntity user) {
         StringJoiner stringJoiner = new StringJoiner(" ");
-        if (!user.getRoles().isEmpty()) {
+        if (!CollectionUtils.isEmpty(user.getRoles())) {
             user.getRoles().forEach(role -> {
                 stringJoiner.add("ROLE_" + role.getName());
                 if (!CollectionUtils.isEmpty(role.getPermissions())) {
