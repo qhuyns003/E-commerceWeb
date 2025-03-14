@@ -65,6 +65,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
             socialId = null;
         }
 
+
         UserEntity userEntity = userRepository.findBySocialIdAndAndAuthProvider(socialId,authProviderEnum)
                 .orElseGet(() -> {
                     Set<Role> roles = new HashSet<>();
