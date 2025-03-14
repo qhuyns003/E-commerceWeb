@@ -12,14 +12,12 @@ import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.intern.e_commerce.dto.request.IntrospectRequest;
 import com.intern.e_commerce.service.AuthenticationService;
 import com.nimbusds.jose.JOSEException;
 
 @Component
-@Transactional
 public class CustomJwtDecoder implements JwtDecoder {
     @Value("${jwt.signerKey}")
     String signerKey;

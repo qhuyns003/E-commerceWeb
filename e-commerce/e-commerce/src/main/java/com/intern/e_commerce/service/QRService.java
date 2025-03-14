@@ -1,34 +1,32 @@
 package com.intern.e_commerce.service;
 
-import com.google.zxing.WriterException;
-import com.intern.e_commerce.configuration.QRGenerator;
-import com.intern.e_commerce.entity.Orders;
-import com.intern.e_commerce.exception.AppException;
-import com.intern.e_commerce.exception.ErrorCode;
-import com.intern.e_commerce.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
-
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.google.zxing.WriterException;
+import com.intern.e_commerce.entity.Orders;
+import com.intern.e_commerce.exception.AppException;
+import com.intern.e_commerce.exception.ErrorCode;
+import com.intern.e_commerce.repository.OrderRepository;
 
 @Service
 public class QRService {
 
     @Autowired
     private OrderRepository orderRepository;
+
     public String generateQR(Long orderId, String accountNumber, String description)
             throws WriterException, IOException {
 
         String vietQRContent = generateVietQR(orderId, accountNumber, description);
         return vietQRContent;
     }
+
     private String generateVietQR(Long orderId, String accountNumber, String description) {
         StringBuilder qrData = new StringBuilder();
         // Phiên bản EMVCo & Loại giao dịch (QR IBFT - Chuyển khoản)

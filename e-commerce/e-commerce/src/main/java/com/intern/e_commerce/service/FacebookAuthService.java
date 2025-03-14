@@ -1,5 +1,11 @@
 package com.intern.e_commerce.service;
 
+import java.util.*;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.intern.e_commerce.entity.Role;
@@ -8,11 +14,6 @@ import com.intern.e_commerce.exception.AppException;
 import com.intern.e_commerce.exception.ErrorCode;
 import com.intern.e_commerce.repository.RoleRepository;
 import com.intern.e_commerce.repository.UserRepositoryInterface;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import java.util.*;
 
 @Service
 public class FacebookAuthService {
@@ -29,7 +30,10 @@ public class FacebookAuthService {
     @Value("${facebook.redirect.uri}")
     private String redirectUri;
 
-    public FacebookAuthService(UserRepositoryInterface userRepository, RoleRepository roleRepository, AuthenticationService authenticationService) {
+    public FacebookAuthService(
+            UserRepositoryInterface userRepository,
+            RoleRepository roleRepository,
+            AuthenticationService authenticationService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.authenticationService = authenticationService;
@@ -55,7 +59,9 @@ public class FacebookAuthService {
             user.setUsername(id);
             user.setFirstName(name);
             Set<Role> roleSet = new HashSet<>();
-            roleSet.add(roleRepository.findById(com.intern.e_commerce.enums.Role.USER.name()).orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
+            roleSet.add(roleRepository
+                    .findById(com.intern.e_commerce.enums.Role.USER.name())
+                    .orElseThrow(() -> new AppException(ErrorCode.ROLE_NOT_FOUND)));
             user.setRoles(roleSet);
             userRepository.save(user);
         }

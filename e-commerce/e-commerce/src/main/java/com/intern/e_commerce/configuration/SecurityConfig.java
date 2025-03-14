@@ -51,8 +51,12 @@ public class SecurityConfig {
                                 .permitAll()
                                 .requestMatchers("/api/identity/auth/**")
                                 .permitAll() //  Cho phép API login
-                                .requestMatchers("/auth/google").permitAll()
-                                .requestMatchers("/auth/facebook-login").permitAll()
+                                .requestMatchers("/auth/google")
+                                .permitAll()
+                                .requestMatchers("/auth/facebook-login")
+                                .permitAll()
+                                .requestMatchers("/api/files/**")
+                                .permitAll()
                                 .anyRequest()
                                 .authenticated() //  Yêu cầu xác thực với các request còn lại
                         )
@@ -70,7 +74,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
+        configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(List.of("*"));
         configuration.setAllowedHeaders(List.of("*"));
         configuration.setAllowCredentials(true);
@@ -108,7 +112,5 @@ public class SecurityConfig {
     //
     //        return new CorsFilter(urlBasedCorsConfigurationSource);
     //    }
-
-
 
 }

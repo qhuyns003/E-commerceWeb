@@ -1,11 +1,11 @@
-package com.intern.e_commerce;
+ package com.intern.e_commerce;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+ import org.junit.jupiter.api.Test;
+ import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class ECommerceApplicationTests {
+ @SpringBootTest
+ class ECommerceApplicationTests {
 
     @Test
     void contextLoads() {}
-}
+ }

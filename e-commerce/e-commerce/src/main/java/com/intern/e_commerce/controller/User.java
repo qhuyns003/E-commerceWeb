@@ -48,7 +48,7 @@ public class User {
     }
 
     @Operation(summary = "Lấy thông tin của user có id trên url", description = "")
-    @GetMapping("/{userId}")
+    @GetMapping("/users/{userId}")
     ApiResponse<UserResponse> getUser(@PathVariable String userId) {
         return ApiResponse.<UserResponse>builder()
                 .result(userService.getUser(userId))

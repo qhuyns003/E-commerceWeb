@@ -5,7 +5,6 @@ import java.util.Set;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.intern.e_commerce.dto.request.CartAddProductRequest;
 import com.intern.e_commerce.dto.request.CartRemoveProductRequest;

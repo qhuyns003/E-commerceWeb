@@ -1,14 +1,10 @@
 package com.intern.e_commerce.service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.intern.e_commerce.dto.request.CategoryCreateRequest;
 import com.intern.e_commerce.dto.request.CategoryUpdateRequest;

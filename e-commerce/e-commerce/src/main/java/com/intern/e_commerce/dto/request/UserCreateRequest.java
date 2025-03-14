@@ -33,7 +33,6 @@ public class UserCreateRequest {
     @Email
     String email;
 
-
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @JsonFormat(pattern = "MM/dd/yyyy")
     @DobConstraint(min = 18, message = "DOB_INVALID")

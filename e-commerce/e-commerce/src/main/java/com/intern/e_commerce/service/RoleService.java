@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.intern.e_commerce.dto.request.RoleRequest;
 import com.intern.e_commerce.dto.request.RoleUpdateRequest;
